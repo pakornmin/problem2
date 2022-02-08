@@ -10,7 +10,8 @@
 
 using namespace std;
 
-bool findSquareOneMatrix(int** matrix, int m, int n);
+pair< pair< pair<int, int>, pair<int, int> >, bool> findSquareOneMatrix
+(int** matrix, int m, int n);
 int** matrixTranspose(int** matrix, int m, int n);
 void readMatrix(int** matrix, string filename);
 void printMatrix(int** matrix, int m, int n);
@@ -45,11 +46,19 @@ int main(int argc, char *argv[]) {
         m = n;
         n = temp;
     }
-    
 
-    bool result = findSquareOneMatrix(matrix, m, n);
-    if(result){
-        cout<<"has square of one\n";
+    printMatrix(matrix, m, n);
+
+
+    pair< pair< pair<int, int>, pair<int, int> >, bool> result
+    = findSquareOneMatrix(matrix, m, n);
+    if(result.second){
+      pair<int, int> rows = result.first.first;
+      pair<int, int> cols = result.first.second;
+      cout << matrix[rows.first][cols.first] << "  "
+           << matrix[rows.first][cols.second]<<endl;
+      cout << matrix[rows.second][cols.first] << "  "
+           << matrix[rows.second][cols.second]<<endl;
     }
     else{
         cout<<"does not have square of one\n";
@@ -63,7 +72,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-bool findSquareOneMatrix(int** matrix, int m, int n) {
+pair< pair< pair<int, int>, pair<int, int> >, bool> findSquareOneMatrix(int** matrix, int m, int n) {
     /*
     This SuperHashTable S hashes pairs of columns with one in the same row to
     another HashTable.
@@ -109,8 +118,26 @@ bool findSquareOneMatrix(int** matrix, int m, int n) {
                         If row is already in rowNeeded of this key:pairOfColumnsWithOne,
                         it means that the program successfully find a square.
                         */
+
+                        int columnDifference = pairOfColumnsWithOne.first
+                                                - pairOfColumnsWithOne.second;
+                        columnDifference = abs(columnDifference);
+
+                        pair< pair< pair<int, int>, pair<int, int> >, bool> ret;
+                        ret.first.second = pairOfColumnsWithOne;
+                        ret.first.first.first = row - columnDifference;
+                        ret.first.first.second = row;
+                        ret.second = true;
+
+
+
+                        cout<<"square at cols "<< pairOfColumnsWithOne.first
+                            <<", "<<pairOfColumnsWithOne.second<<endl;
+                        cout<<"          rows "<< row-columnDifference
+                                <<", "<<row <<endl;
                         delete S;
-                        return true;
+                        return ret;
+
                     }
                     /*
                     If row is NOT already in rowNeeded of this key:pairOfColumnsWithOne,
@@ -127,7 +154,9 @@ bool findSquareOneMatrix(int** matrix, int m, int n) {
 
     }
     delete S;
-    return false;
+    pair< pair< pair<int, int>, pair<int, int> >, bool> ret;
+    ret.second = false;
+    return ret;
 }
 
 
@@ -165,7 +194,7 @@ void printMatrix(int** matrix, int m, int n){
   cout<<"--------------------------------------------\n";
   for (int i = 0; i < m; i++) {
       for (int j = 0; j < n; j++) {
-          cout << matrix[i][j] << "   ";
+          cout << matrix[i][j] << " ";
       }
       cout<<endl;
   }
