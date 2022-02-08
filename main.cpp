@@ -1,30 +1,51 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include "superHashTable.h" /* i wrote this one myself because the hasfunction of
+#include "dst/superHashTable.h" /* i wrote this one myself because the hasfunction of
                         unordered_Map cannot hash pair*/
-#include "hashTable.h" /*also, wrote this one myself*/
+#include "dst/hashTable.h" /*also, wrote this one myself*/
 #include <cmath>
+#include <fstream>
+
 
 using namespace std;
 
 bool findSquareOneMatrix(int** matrix, int m, int n);
-int** matrixInPut(int m, int n);
 int** matrixTranspose(int** matrix, int m, int n);
+void readMatrix(int** matrix, string filename);
+void printMatrix(int** matrix, int m, int n);
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    if(argc != 2){
+        throw runtime_error("invalid number of inputs: should be 2");
+    }
 
     int m, n;
-    cout<<"what is the dimesion of the matrix (m x n): \n";
-    cin>>m>>n;
+    string filename = argv[1];
+    ifstream input;
+    input.open(filename);
+    input >> m >> n;
+    int** matrix;
+    matrix = new int*[m];
+    for(int i=0; i<m; i++) {
+        matrix[i] = new int[n];
+    }
 
-    int** matrix = matrixInPut(m,n);
+    cout<<"inspecting "<< m <<" by "<< n <<" matrix: "<<filename<<"\n";
+
+
+    readMatrix(matrix, filename);
+    printMatrix(matrix, m, n);
+
+
     if(n>m){
         matrix = matrixTranspose(matrix,m,n);
         int temp = m;
         m = n;
         n = temp;
     }
+    
 
     bool result = findSquareOneMatrix(matrix, m, n);
     if(result){
@@ -109,21 +130,7 @@ bool findSquareOneMatrix(int** matrix, int m, int n) {
     return false;
 }
 
-int** matrixInPut(int m, int n) {
-    int** matrix = new int*[m];
-    for(int i=0; i<m; i++) {
-        matrix[i] = new int[n];
-    }
 
-    cout<<"matrix's element: \n";
-    for(int row=0; row<m; row++) {
-        for(int col=0; col<n; col++) {
-            cin>>matrix[row][col];
-        }
-    }
-
-    return matrix;
-}
 
 int** matrixTranspose(int** matrix, int m, int n){
     int** newMatrix = new int*[n];
@@ -140,4 +147,27 @@ int** matrixTranspose(int** matrix, int m, int n){
     delete[] matrix;
 
     return newMatrix;
+}
+
+void readMatrix(int** matrix, string filename) {
+  ifstream input;
+  input.open(filename);
+  int m, n;
+  input >> m >> n;
+  for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+          input >> matrix[i][j];
+      }
+  }
+}
+
+void printMatrix(int** matrix, int m, int n){
+  cout<<"--------------------------------------------\n";
+  for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+          cout << matrix[i][j] << "   ";
+      }
+      cout<<endl;
+  }
+  cout<<"--------------------------------------------\n";
 }

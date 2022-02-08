@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include "superHashTable.h" /* i wrote this one myself because the hasfunction of
+#include "dst/superHashTable.h" /* i wrote this one myself because the hasfunction of
                         unordered_Map cannot hash pair*/
-#include "hashTable.h" /*also, wrote this one myself*/
+#include "dst/hashTable.h" /*also, wrote this one myself*/
 #include <cmath>
 
 int main(int argc, char const *argv[]) {

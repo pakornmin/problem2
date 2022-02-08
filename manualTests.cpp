@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <utility>
-#include "superHashTable.h" /* i wrote this one myself because the hasfunction of
+#include "dst/superHashTable.h" /* i wrote this one myself because the hasfunction of
                         unordered_Map cannot hash pair*/
-#include "hashTable.h" /*also, wrote this one myself*/
+#include "dst/hashTable.h" /*also, wrote this one myself*/
 #include <cmath>
 
 using namespace std;
@@ -112,7 +112,7 @@ bool findSquareOneMatrix(int** matrix, int m, int n) {
                         pairOfColumnsWithOne.second<<
                         ") is inserted with          size: "<<
                         S->get(pairOfColumnsWithOne)->getSize()
-                        <<"%%%%%%% SIZE OF S: "<<S->getSize()<<endl;  
+                        <<"%%%%%%% SIZE OF S: "<<S->getSize()<<endl;
 
 
                 }
